@@ -1,7 +1,9 @@
 import { GET } from '../types';
+
 const initialState = {
   fetchedPosts: []
 }
+
 export const postReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET:
@@ -13,4 +15,4 @@ export const postReducer = (state = initialState, action) => {
     default:
       return state
   }
-}
+};

@@ -1,13 +1,13 @@
-import React from 'react'
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { useDispatch } from 'react-redux';
+import { deletePosts } from '../../redux/actions/actionCreator';
+
 import Card from '@material-ui/core/Card';
 import DeleteIcon  from '../../../node_modules/@material-ui/icons/Delete';
 import Button from '@material-ui/core/Button';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import { useDispatch } from 'react-redux';
-import { deletePosts } from '../../redux/actions/actionCreator'
-
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -29,11 +29,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Post({
-  title, body, id
+  title,
+  body,
+  id
 }) {
   const dispatch = useDispatch();
-
   const classes = useStyles();
+
   return (
     <li className={classes.item}>
       <Card className={classes.root} variant="outlined">
@@ -59,4 +61,4 @@ export default function Post({
       </Card>
     </li>
   )
-}
+};

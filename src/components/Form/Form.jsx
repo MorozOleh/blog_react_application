@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { useDispatch } from 'react-redux';
+import { hideModal, addPost } from '../../redux/actions/actionCreator';
+
 import TextField from '@material-ui/core/TextField';
 import SaveIcon from '@material-ui/icons/Save';
 import Button from '@material-ui/core/Button';
-import { useDispatch } from 'react-redux';
-
-import { hideModal } from '../../redux/actions/actionCreator';
-
-
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,51 +45,51 @@ export function Form() {
       default:
         return;
     }
-  }
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch(hideModal())
 
-  }
+    dispatch(addPost({ title, body }))
+    dispatch(hideModal())
+    setTitle('')
+    setBody('');
+  };
 
   return (
     <form className={classes.root} noValidate autoComplete="off" onSubmit={handleSubmit}>
-
       <div>
         <TextField
-          label="Size"
+          label="Type your title"
           id="filled-size-normal"
           value={title}
           name="title"
           variant="filled"
           onChange={handleInput}
-
         />
       </div>
       <div>
         <TextField
-          label="Size"
+          label="Type here"
           id="filled-size-normal"
           value={body}
           name="body"
-          onChange={handleInput}
           variant="filled"
+          onChange={handleInput}
         />
       </div>
       <div>
         <Button
+        className={classes.button}
         variant="contained"
         color="primary"
         size="large"
         type="submit"
-        className={classes.button}
         startIcon={<SaveIcon />}
       >
         Save
       </Button>
       </div>
-
     </form>
   );
-}
+};

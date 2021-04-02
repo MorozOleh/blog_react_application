@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
-import Post from '../Post';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { fetchPosts } from '../../redux/actions/actionCreator';
-import Button from '@material-ui/core/Button';
-import { Modal } from '../Modal';
 import { showModal } from '../../redux/actions/actionCreator';
+
+import { Modal } from '../Modal';
+import Button from '@material-ui/core/Button';
+import Post from '../Post';
 
 const useStyles = makeStyles({
   button: {
@@ -18,12 +19,9 @@ const useStyles = makeStyles({
   }
 })
 
-
-
 function Posts() {
   const dispatch = useDispatch();
   const classes = useStyles();
-
   const posts = useSelector(state => state.postReducer.fetchedPosts);
 
   useEffect(() => dispatch(fetchPosts()), []);
@@ -52,11 +50,6 @@ function Posts() {
       <Modal />
     </>
   )
-}
+};
 
 export default Posts;
-
-
-
-
-    
