@@ -1,4 +1,4 @@
-import { GET } from '../types';
+import { GET, SHOW_MODAL, HIDE_MODAL } from '../types';
 import { fetchPost } from '../../API/getPosts';
 import { deletePost } from '../../API/deletePost';
 
@@ -25,3 +25,14 @@ export function deletePosts(id) {
     })
   }
 };
+
+export function showModal() {
+  return {
+    type: SHOW_MODAL
+  }
+}
+export function hideModal() {
+  return {
+    type: HIDE_MODAL
+  }
+}
