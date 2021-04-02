@@ -5,6 +5,8 @@ import DeleteIcon  from '../../../node_modules/@material-ui/icons/Delete';
 import Button from '@material-ui/core/Button';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import { useDispatch } from 'react-redux';
+import { deletePosts } from '../../redux/actions/actionCreator'
 
 
 const useStyles = makeStyles(theme => ({
@@ -29,7 +31,7 @@ const useStyles = makeStyles(theme => ({
 export default function Post({
   title, body, id
 }) {
-
+  const dispatch = useDispatch();
 
   const classes = useStyles();
   return (
@@ -49,7 +51,7 @@ export default function Post({
             color="secondary"
             className={classes.button}
             startIcon={<DeleteIcon />}
-            onClick={() => console.log('hello')}
+            onClick={() => dispatch(deletePosts(id))}
           >
             Delete
           </Button>

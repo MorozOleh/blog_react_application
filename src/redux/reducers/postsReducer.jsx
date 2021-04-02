@@ -1,4 +1,4 @@
-import { GET } from '../types';
+import { GET, DELETE } from '../types';
 const initialState = {
   fetchedPosts: []
 }

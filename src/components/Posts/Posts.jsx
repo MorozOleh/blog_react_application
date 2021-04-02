@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import Post from '../Post';
 import {useDispatch, useSelector } from 'react-redux';
 import { fetchPosts } from '../../redux/actions/actionCreator';
-import { makeStyles } from '@material-ui/core/styles';
 
 
 function Posts() {
@@ -10,7 +9,7 @@ function Posts() {
   const posts = useSelector(state => state.postReducer.fetchedPosts);
   console.log(posts)
 
-  useEffect(() => dispatch(fetchPosts('posts')), []);
+  useEffect(() => dispatch(fetchPosts()), []);
 
   return (
     <ul>
