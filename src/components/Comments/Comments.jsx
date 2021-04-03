@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPostComments, deleteComments, fetchPosts } from '../../redux/actions/actionCreator'
+import { deleteComments, fetchPosts } from '../../redux/actions/actionCreator'
 import { Modal } from '../Modal';
-import { showModal } from '../../redux/actions/actionCreator';
+import { showModal } from '../../redux/actions/actionModal';
 import { useStyles } from './CommentsStyle';
 
 import ButtonGroup from '@material-ui/core/ButtonGroup';
@@ -18,9 +18,7 @@ export function Comments() {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
-  const {postId} = +useParams().match;
-
-  useEffect(() => dispatch(getPostComments(postId)), [])
+  const match = useParams()
 
   const comments = useSelector(
     state => state.commentsReducer.fetchedComments
@@ -50,7 +48,7 @@ export function Comments() {
                   startIcon={<DeleteIcon />}
                   onClick={() => dispatch(deleteComments({
                     id: comment.id,
-                    postId
+                    postId: +match.postId
                   }))}
                 >
                   Delete

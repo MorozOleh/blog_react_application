@@ -3,7 +3,7 @@ import {
   useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom'
 import { fetchPosts } from '../../redux/actions/actionCreator';
-import { showModal } from '../../redux/actions/actionCreator';
+import { showModal } from '../../redux/actions/actionModal';
 import { Modal } from '../Modal';
 import { useStyles } from './PostsStyle';
 
@@ -20,7 +20,7 @@ function Posts() {
   
   useEffect(() => {
     dispatch(fetchPosts());
-  }, []);
+  }, [dispatch]);
 
   return (
     <>

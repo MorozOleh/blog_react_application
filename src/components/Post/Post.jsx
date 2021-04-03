@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { deletePosts, getPost, getPostComments } from '../../redux/actions/actionCreator';
+import { deletePosts, fetchPostById } from '../../redux/actions/actionCreator';
 import { Link, useLocation, useHistory } from 'react-router-dom';
 import { Comments } from '../Comments';
 import { useStyles } from './PostStyle';
@@ -24,10 +24,8 @@ export default function Post({
   const classes = useStyles();
   const history = useHistory()
 
-
   const handleComments = (id) => {
-    dispatch(getPostComments(id))
-    dispatch(getPost(id))
+    dispatch(fetchPostById(id))
   }
 
   const handleDelete = (id) => {

@@ -9,4 +9,4 @@ const request = async() => {
   return data;
 }
 
-export const fetchPost = () => request();
+export const getPosts = () => request();

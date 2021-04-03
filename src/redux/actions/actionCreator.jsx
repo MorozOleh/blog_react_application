@@ -3,21 +3,19 @@ import {
   GET,
   GET_COMMENTS,
   GET_POST,
-  SHOW_MODAL,
-  HIDE_MODAL,
   GET_POST_COMMENTS
 } from '../types';
-import { fetchPost } from '../../API/getPosts';
+import { getPosts } from '../../API/getPosts';
+import { getComments } from '../../API/getComments';
 import { deletePost } from '../../API/deletePost';
 import { deleteComment } from '../../API/deleteComment';
 import { createPost } from '../../API/createPost';
 import { createComment } from '../../API/createComment';
-import { fetchComments as getComments } from '../../API/getComments';
 
 
 export function fetchPosts() {
   return async dispatch => {
-    const response = await fetchPost();
+    const response = await getPosts();
 
     dispatch({
       type: GET,
@@ -26,44 +24,31 @@ export function fetchPosts() {
   }
 };
 
-export function getPost(id) {
-  return {
-    type: GET_POST,
-    payload: id
-  }
-}
-
-export function fetchComments() {
+export function fetchPostById(id) {
   return async dispatch => {
-    const response = await getComments();
-
     dispatch({
-      type: GET_COMMENTS,
-      payload: response,
-    })
-  }
-};
-
-export function getPostComments(id) {
-  return async dispatch => {
-    const response = await getComments();
-
-    dispatch({
-      type: GET_COMMENTS,
-      payload: response,
+      type: GET_POST,
+      payload: id
     });
+
+    const response = await getComments();
+
+    dispatch({
+      type: GET_COMMENTS,
+      payload: response
+    })
 
     dispatch({
       type: GET_POST_COMMENTS,
       payload: id
     })
-  }  
-}
+  }
+};
 
 export function deletePosts(id) {
   return async dispatch => {
     await deletePost(id);
-    const response = await fetchPost();
+    const response = await getPosts();
   
     dispatch({
       type: GET,
@@ -92,7 +77,7 @@ export function deleteComments({id, postId}) {
 export function addPost(newPost) {
   return async dispatch => {
     await createPost(newPost);
-    const response = await fetchPost();
+    const response = await getPosts();
   
     dispatch({
       type: GET,
@@ -103,24 +88,19 @@ export function addPost(newPost) {
 
 export function addComment(newComment) {
   return async dispatch => {
+    const { postId } = newComment;
     await createComment(newComment);
 
-    const response = await getComments();
+     const response = await getComments();
+
     dispatch({
       type: GET_COMMENTS,
-      payload: response,
+      payload: response
     })
-  }
-};
 
-export function showModal() {
-  return {
-    type: SHOW_MODAL
-  }
-};
-
-export function hideModal() {
-  return {
-    type: HIDE_MODAL
+    dispatch({
+      type: GET_POST_COMMENTS,
+      payload: postId
+    })
   }
 };

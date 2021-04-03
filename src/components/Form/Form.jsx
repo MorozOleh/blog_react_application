@@ -1,25 +1,28 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { hideModal, addPost, addComment } from '../../redux/actions/actionCreator';
+import { addPost, addComment } from '../../redux/actions/actionCreator';
+import { hideModal} from '../../redux/actions/actionModal';
 import { useLocation, useParams } from 'react-router-dom';
 import { useStyles } from './FormStyle';
+import { toast } from 'react-toastify';
 
+import 'react-toastify/dist/ReactToastify.css';
 import TextField from '@material-ui/core/TextField';
 import SaveIcon from '@material-ui/icons/Save';
 import Button from '@material-ui/core/Button';
 
 export function Form() {
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const isOpenComment = searchParams.get('_embed');
-  const { postId } = +useParams().match;
-
-  const dispatch = useDispatch()
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('')
+  const match = useParams();
+  const dispatch = useDispatch();
   const classes = useStyles();
 
-  const handleInput = (event) => {
+  const onInputsChanged = (event) => {
     const { name, value } = event.target;
 
     switch (name) {
@@ -38,68 +41,67 @@ export function Form() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch(hideModal())
     setBody('');
     
-    if (isOpenComment) {
-      dispatch(addComment({
-        postId,
-        body,
-      }))
-      
-      return;
-    }
+    if (isOpenComment && body) {
+      toast.success('You have successfully added your comment');
+      dispatch(addComment({ postId: +match.postId, body }));
+      dispatch(hideModal());
 
-    dispatch(addPost({ title, body }))
-    setTitle('')
+      return;
+    };
+    
+    if (title && body) {
+      toast.success('You have successfully added your post');
+      dispatch(addPost({ title, body }));
+      dispatch(hideModal());
+      setTitle('');
+
+      return;
+    };
+
+    toast.warn('Upps you have forgotten to fill all fields')
   };
 
   return (
     <form className={classes.root} noValidate autoComplete="off" onSubmit={handleSubmit}>
-      {!isOpenComment && <>
+      {!isOpenComment &&
         <div>
+          <TextField
+            label="Type your title"
+            id="filled-size-normal"
+            value={title}
+            name="title"
+            variant="filled"
+            onChange={onInputsChanged}
+          />
+        </div>
+      }
+
+      <div>
         <TextField
-          label="Type your title"
+          label={!isOpenComment
+            ? "Type your description"
+            : "Type your comment"
+          }
           id="filled-size-normal"
-          value={title}
-          name="title"
+          value={body}
+          name="body"
           variant="filled"
-          onChange={handleInput}
+          onChange={onInputsChanged}
         />
       </div>
       <div>
-        <TextField
-          label="Type here"
-          id="filled-size-normal"
-          value={body}
-          name="body"
-          variant="filled"
-          onChange={handleInput}
-        />
-        </div>
-      </> }
-      { isOpenComment && <div>
-        <TextField
-          label="Type comment"
-          id="filled-size-normal"
-          value={body}
-          name="body"
-          variant="filled"
-          onChange={handleInput}
-        />
-        </div>
-      }
-      <div>
         <Button
-        className={classes.button}
-        variant="contained"
-        color="primary"
-        size="large"
-        type="submit"
-        startIcon={<SaveIcon />}
-      >
-        Save
-      </Button>
+          className={classes.button}
+          variant="contained"
+          color="primary"
+          size="large"
+          type="submit"
+          startIcon={<SaveIcon />}
+        >
+          Save
+        </Button>
       </div>
     </form>
   );

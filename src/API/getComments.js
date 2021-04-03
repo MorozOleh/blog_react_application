@@ -8,4 +8,4 @@ const request = async() => {
   return data;
 }
 
-export const fetchComments = () => request();
+export const getComments = () => request();
