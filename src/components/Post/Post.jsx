@@ -1,9 +1,9 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch } from 'react-redux';
 import { deletePosts, getPost, getPostComments } from '../../redux/actions/actionCreator';
 import { Link, useLocation, useHistory } from 'react-router-dom';
 import { Comments } from '../Comments';
+import { useStyles } from './PostStyle';
 
 import Card from '@material-ui/core/Card';
 import DeleteIcon  from '../../../node_modules/@material-ui/icons/Delete';
@@ -11,25 +11,6 @@ import Button from '@material-ui/core/Button';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    minWidth: 275,
-  },
-
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
-  item: {
-    listStyle: 'none'
-  },
-  button: {
-    margin: theme.spacing(1),
-  },
-}));
 
 export default function Post({
   title,
@@ -53,8 +34,6 @@ export default function Post({
     dispatch(deletePosts(id));
     history.push('/');
   }
-
-
 
   return (
     <>

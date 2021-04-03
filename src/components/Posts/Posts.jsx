@@ -1,30 +1,18 @@
 import React, { useEffect } from 'react';
 import {
-  useDispatch, useSelector
-} from 'react-redux';
+  useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom'
-import { makeStyles } from '@material-ui/core/styles';
-import { fetchComments, fetchPosts } from '../../redux/actions/actionCreator';
+import { fetchPosts } from '../../redux/actions/actionCreator';
 import { showModal } from '../../redux/actions/actionCreator';
-
 import { Modal } from '../Modal';
+import { useStyles } from './PostsStyle';
+
 import Button from '@material-ui/core/Button';
 import Post from '../Post';
 
-const useStyles = makeStyles({
-  button: {
-    margin: '20px auto 0',
-    display: 'block'
-  },
-
-  list: {
-    margin: 0
-  }
-})
-
 function Posts() {
-  const dispatch = useDispatch();
   const classes = useStyles();
+  const dispatch = useDispatch();
   const posts = useSelector(state => state.postsReducer.fetchedPosts);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -34,7 +22,6 @@ function Posts() {
     dispatch(fetchPosts());
   }, []);
 
-  console.log(posts)
   return (
     <>
       <ul className={classes.list}>
@@ -48,14 +35,16 @@ function Posts() {
         )
         )}
       </ul>
-      {!isOpenComment && <Button
-        variant="contained"
-        className={classes.button}
-        color="secondary"
-        onClick={() => dispatch(showModal())}
-      >
-        Add new post
-      </Button>}
+      {!isOpenComment &&
+        <Button
+          variant="contained"
+          className={classes.button}
+          color="secondary"
+          onClick={() => dispatch(showModal())}
+        >
+          Add new post
+        </Button>
+      }
       <Modal />
     </>
   )

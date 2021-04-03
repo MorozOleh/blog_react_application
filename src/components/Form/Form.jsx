@@ -1,35 +1,18 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch } from 'react-redux';
-import { hideModal, addPost, addComment, getPostComments } from '../../redux/actions/actionCreator';
+import { hideModal, addPost, addComment } from '../../redux/actions/actionCreator';
 import { useLocation, useParams } from 'react-router-dom';
+import { useStyles } from './FormStyle';
 
 import TextField from '@material-ui/core/TextField';
 import SaveIcon from '@material-ui/icons/Save';
 import Button from '@material-ui/core/Button';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    background: 'white',
-    padding: 50,
-    borderRadius: 15,
-
-    '& .MuiTextField-root': {
-      margin: theme.spacing(1),
-      width: 500,
-    },
-  },
-  button: {
-    display: 'flex',
-    margin: '0 auto'
-  }
-}));
-
 export function Form() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const isOpenComment = searchParams.get('_embed');
-  const match = useParams()
+  const { postId } = +useParams().match;
 
   const dispatch = useDispatch()
   const [title, setTitle] = useState('');
@@ -60,7 +43,7 @@ export function Form() {
     
     if (isOpenComment) {
       dispatch(addComment({
-        postId: +match.postId,
+        postId,
         body,
       }))
       
