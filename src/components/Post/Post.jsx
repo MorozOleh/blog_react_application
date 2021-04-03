@@ -1,8 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch } from 'react-redux';
-import { deletePosts, getPost } from '../../redux/actions/actionCreator';
-import { Link, useLocation } from 'react-router-dom';
+import { deletePosts, getPost, getPostComments } from '../../redux/actions/actionCreator';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 import { Comments } from '../Comments';
 
 import Card from '@material-ui/core/Card';
@@ -41,6 +41,20 @@ export default function Post({
   const isOpenComment = searchParams.get('_embed');
   const dispatch = useDispatch();
   const classes = useStyles();
+  const history = useHistory()
+
+
+  const handleComments = (id) => {
+    dispatch(getPostComments(id))
+    dispatch(getPost(id))
+  }
+
+  const handleDelete = (id) => {
+    dispatch(deletePosts(id));
+    history.push('/');
+  }
+
+
 
   return (
     <>
@@ -60,13 +74,13 @@ export default function Post({
               color="secondary"
               className={classes.button}
               startIcon={<DeleteIcon />}
-              onClick={() => dispatch(deletePosts(id))}
+              onClick={() => handleDelete(id)}
             >
               Delete
             </Button>
             <Link
               to={`/${id}?_embed=comments`}
-              onClick={() => {dispatch(getPost(id))}}
+              onClick={() => handleComments(id)}
             >
               Comments
               </Link>

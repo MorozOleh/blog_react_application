@@ -45,10 +45,19 @@ export function fetchComments() {
 };
 
 export function getPostComments(id) {
-  return {
-    type: GET_POST_COMMENTS,
-    payload: id
-  }
+  return async dispatch => {
+    const response = await getComments();
+
+    dispatch({
+      type: GET_COMMENTS,
+      payload: response,
+    });
+
+    dispatch({
+      type: GET_POST_COMMENTS,
+      payload: id
+    })
+  }  
 }
 
 export function deletePosts(id) {
@@ -95,10 +104,10 @@ export function addPost(newPost) {
 export function addComment(newComment) {
   return async dispatch => {
     await createComment(newComment);
+
     const response = await getComments();
-  
     dispatch({
-      type: GET,
+      type: GET_COMMENTS,
       payload: response,
     })
   }

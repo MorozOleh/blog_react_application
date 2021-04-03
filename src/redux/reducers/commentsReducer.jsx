@@ -13,6 +13,7 @@ export const commentsReducer = (state = initialState, action) => {
       }
     
     case GET_POST_COMMENTS:
+      console.log(state)
       return {
         ...state,
         fetchedComments: state.fetchedComments.filter(

@@ -58,6 +58,8 @@ export function Comments() {
     dispatch(fetchPosts())
   }
 
+  console.log(comments)
+
   return (
     <>
       <ul>

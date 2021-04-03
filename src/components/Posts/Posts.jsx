@@ -32,10 +32,9 @@ function Posts() {
   
   useEffect(() => {
     dispatch(fetchPosts());
-  dispatch(fetchComments());
   }, []);
 
-  console.log('posts')
+  console.log(posts)
   return (
     <>
       <ul className={classes.list}>

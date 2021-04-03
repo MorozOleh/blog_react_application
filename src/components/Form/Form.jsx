@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch } from 'react-redux';
-import { hideModal, addPost, addComment } from '../../redux/actions/actionCreator';
+import { hideModal, addPost, addComment, getPostComments } from '../../redux/actions/actionCreator';
 import { useLocation, useParams } from 'react-router-dom';
 
 import TextField from '@material-ui/core/TextField';
@@ -30,6 +30,7 @@ export function Form() {
   const searchParams = new URLSearchParams(location.search);
   const isOpenComment = searchParams.get('_embed');
   const match = useParams()
+
   const dispatch = useDispatch()
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('')
