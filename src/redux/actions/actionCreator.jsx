@@ -11,7 +11,21 @@ import { deletePost } from '../../API/deletePost';
 import { deleteComment } from '../../API/deleteComment';
 import { createPost } from '../../API/createPost';
 import { createComment } from '../../API/createComment';
+import { putPost } from '../../API/putPost';
 
+
+export function updatePost(id, newPost) {
+  return async dispatch => {
+    await putPost(id, newPost);
+
+    const response = await getPosts();
+    
+    dispatch({
+      type: GET,
+      payload: response,
+    })
+  }
+};
 
 export function fetchPosts() {
   return async dispatch => {

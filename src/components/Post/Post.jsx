@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { deletePosts, fetchPostById } from '../../redux/actions/actionCreator';
-import { Link, useLocation, useHistory } from 'react-router-dom';
+import {  Link, useLocation, useHistory } from 'react-router-dom';
 import { Comments } from '../Comments';
 import { useStyles } from './PostStyle';
 
@@ -10,7 +10,7 @@ import DeleteIcon  from '../../../node_modules/@material-ui/icons/Delete';
 import Button from '@material-ui/core/Button';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-
+import { showModal } from '../../redux/actions/actionModal';
 
 export default function Post({
   title,
@@ -25,7 +25,12 @@ export default function Post({
   const history = useHistory()
 
   const handleComments = (id) => {
-    dispatch(fetchPostById(id))
+    dispatch(fetchPostById(id));
+  }
+  
+  const editPost = (id) => {
+    dispatch(fetchPostById(id));
+    dispatch(showModal());
   }
 
   const handleDelete = (id) => {
@@ -55,12 +60,28 @@ export default function Post({
             >
               Delete
             </Button>
-            <Link
+
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              component={Link}
               to={`/${id}?_embed=comments`}
               onClick={() => handleComments(id)}
             >
               Comments
-              </Link>
+            </Button>
+
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              component={Link}
+              to={`/${id}?post=edit`}
+              onClick={() => editPost(id)}
+            >
+              Edit
+            </Button>
           </CardContent>
         </Card>
       </li>

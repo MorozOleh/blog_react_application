@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const BASE_URL = 'https://bloggy-api.herokuapp.com/posts';
+export const BASE_URL = 'https://bloggy-api.herokuapp.com/posts/';
 
 const request = async() => {
   const response = await axios.get(BASE_URL);

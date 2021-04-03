@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addPost, addComment } from '../../redux/actions/actionCreator';
+import { addPost, addComment, updatePost} from '../../redux/actions/actionCreator';
 import { hideModal} from '../../redux/actions/actionModal';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useHistory } from 'react-router-dom';
 import { useStyles } from './FormStyle';
 import { toast } from 'react-toastify';
 
@@ -12,12 +12,16 @@ import SaveIcon from '@material-ui/icons/Save';
 import Button from '@material-ui/core/Button';
 
 export function Form() {
+
+  
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
 
   const location = useLocation();
+  const history = useHistory()
   const searchParams = new URLSearchParams(location.search);
   const isOpenComment = searchParams.get('_embed');
+  const isEditPost = searchParams.get('post');
   const match = useParams();
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -42,6 +46,16 @@ export function Form() {
   const handleSubmit = (event) => {
     event.preventDefault();
     setBody('');
+
+    if (isEditPost) {
+      toast.success('You have successfully updated your post');
+      dispatch(updatePost(+match.postId, { title, body }));
+      dispatch(hideModal());
+      history.push('/');
+      setTitle('');
+
+      return;
+    }
     
     if (isOpenComment && body) {
       toast.success('You have successfully added your comment');
