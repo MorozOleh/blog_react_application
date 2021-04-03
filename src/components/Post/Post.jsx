@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch } from 'react-redux';
 import { deletePosts, getPost } from '../../redux/actions/actionCreator';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Comments } from '../Comments';
 
 import Card from '@material-ui/core/Card';

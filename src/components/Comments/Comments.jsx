@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-
 import { useDispatch, useSelector } from 'react-redux';
-import { getPostComments, deleteComments } from '../../redux/actions/actionCreator'
+import { getPostComments, deleteComments, fetchPosts } from '../../redux/actions/actionCreator'
 import { Modal } from '../Modal';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { showModal } from '../../redux/actions/actionCreator';
 import Card from '@material-ui/core/Card';
 import DeleteIcon  from '../../../node_modules/@material-ui/icons/Delete';
@@ -17,6 +17,15 @@ const useStyles = makeStyles(theme => ({
     minWidth: 275,
   },
 
+  wrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+    
   title: {
     fontSize: 14,
   },
@@ -34,14 +43,20 @@ const useStyles = makeStyles(theme => ({
 
 export function Comments() {
   const classes = useStyles();
-
-  const match = useParams()
+  const history = useHistory();
   const dispatch = useDispatch();
+
+  const match = useParams();
   useEffect(() => dispatch(getPostComments(+match.postId)), [])
 
   const comments = useSelector(
     state => state.commentsReducer.fetchedComments
   );
+
+  const returnMainPageHandler = () => {
+    history.push('/');
+    dispatch(fetchPosts())
+  }
 
   return (
     <>
@@ -72,13 +87,24 @@ export function Comments() {
       </li>
         ))}
       </ul>
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={() => dispatch(showModal())}
-      >
-        Add new post
-      </Button>
+      <div className={classes.wrapper}>
+        <ButtonGroup
+          size="large"
+          color="primary"
+          aria-label="large outlined primary button group"
+        >
+          <Button
+            onClick={() => dispatch(showModal())}
+          >
+            Add new comment
+          </Button>
+          <Button
+            onClick={returnMainPageHandler}
+          >
+            Main page
+          </Button>
+      </ButtonGroup>
+      </div>
       <Modal />
     </>
   )
