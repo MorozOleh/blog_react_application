@@ -1,8 +1,11 @@
 import { combineReducers } from 'redux';
-import { postReducer } from './postsReducer';
-import { modalReducer} from './modalReducer'
+import { postsReducer } from './postsReducer';
+import { modalReducer } from './modalReducer';
+import { commentsReducer } from './commentsReducer';
+
 
 export const blogApp = combineReducers({
-  postReducer,
+  postsReducer,
   modalReducer,
+  commentsReducer
 });

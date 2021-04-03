@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { useDispatch } from 'react-redux';
-import { deletePosts, getPost } from '../../redux/actions/actionCreator';
-import { Link, useHistory, useLocation } from 'react-router-dom';
-import { Comments } from '../Comments';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { getPostComments, deleteComments } from '../../redux/actions/actionCreator'
+import { Modal } from '../Modal';
+import { showModal } from '../../redux/actions/actionCreator';
 import Card from '@material-ui/core/Card';
 import DeleteIcon  from '../../../node_modules/@material-ui/icons/Delete';
 import Button from '@material-ui/core/Button';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,28 +31,28 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Post({
-  title,
-  body,
-  id
-}) {
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const isOpenComment = searchParams.get('_embed');
-  const dispatch = useDispatch();
+
+export function Comments() {
   const classes = useStyles();
+
+  const match = useParams()
+  const dispatch = useDispatch();
+  useEffect(() => dispatch(getPostComments(+match.postId)), [])
+
+  const comments = useSelector(
+    state => state.commentsReducer.fetchedComments
+  );
 
   return (
     <>
-      <li className={classes.item}>
+      <ul>
+        {comments.map(comment => (
+          <li key={comment.id} className={classes.item}>
         <Card className={classes.root} variant="outlined">
           <CardContent>
-            <Typography className={classes.title} color="textSecondary" gutterBottom>
-              {title}
-            </Typography>
 
             <Typography className={classes.pos} color="textSecondary">
-              {body}
+              {comment.body}
             </Typography>
 
             <Button
@@ -60,20 +60,26 @@ export default function Post({
               color="secondary"
               className={classes.button}
               startIcon={<DeleteIcon />}
-              onClick={() => dispatch(deletePosts(id))}
+                  onClick={() => dispatch(deleteComments({
+                    id: comment.id,
+                    postId: + match.postId
+                  }))}
             >
               Delete
             </Button>
-            <Link
-              to={`/${id}?_embed=comments`}
-              onClick={() => {dispatch(getPost(id))}}
-            >
-              Comments
-              </Link>
           </CardContent>
         </Card>
       </li>
-      {isOpenComment && < Comments />}
+        ))}
+      </ul>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={() => dispatch(showModal())}
+      >
+        Add new post
+      </Button>
+      <Modal />
     </>
   )
-};
+}

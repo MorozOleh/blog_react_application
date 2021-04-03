@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch } from 'react-redux';
-import { hideModal, addPost } from '../../redux/actions/actionCreator';
+import { hideModal, addPost, addComment } from '../../redux/actions/actionCreator';
+import { useLocation, useParams } from 'react-router-dom';
 
 import TextField from '@material-ui/core/TextField';
 import SaveIcon from '@material-ui/icons/Save';
@@ -25,6 +26,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export function Form() {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const isOpenComment = searchParams.get('_embed');
+  const match = useParams()
   const dispatch = useDispatch()
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('')
@@ -49,16 +54,26 @@ export function Form() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    dispatch(hideModal())
+    setBody('');
+    
+    if (isOpenComment) {
+      dispatch(addComment({
+        postId: +match.postId,
+        body,
+      }))
+      
+      return;
+    }
 
     dispatch(addPost({ title, body }))
-    dispatch(hideModal())
     setTitle('')
-    setBody('');
   };
 
   return (
     <form className={classes.root} noValidate autoComplete="off" onSubmit={handleSubmit}>
-      <div>
+      {!isOpenComment && <>
+        <div>
         <TextField
           label="Type your title"
           id="filled-size-normal"
@@ -77,7 +92,19 @@ export function Form() {
           variant="filled"
           onChange={handleInput}
         />
-      </div>
+        </div>
+      </> }
+      { isOpenComment && <div>
+        <TextField
+          label="Type comment"
+          id="filled-size-normal"
+          value={body}
+          name="body"
+          variant="filled"
+          onChange={handleInput}
+        />
+        </div>
+      }
       <div>
         <Button
         className={classes.button}
