@@ -72,16 +72,17 @@ export default function Post({
               Comments
             </Button>
 
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.button}
-              component={Link}
-              to={`/${id}?post=edit`}
-              onClick={() => editPost(id)}
-            >
-              Edit
-            </Button>
+            {!isOpenComment &&
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                component={Link}
+                to={`/${id}?post=edit`}
+                onClick={() => editPost(id)}
+              >
+                Edit
+              </Button>}
           </CardContent>
         </Card>
       </li>
